@@ -1,6 +1,14 @@
-import java.time.Duration;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,7 +17,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Class {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		WebDriver driver;
 
 		WebDriverManager.chromedriver().setup();
@@ -36,7 +44,29 @@ public class Class {
 		WebElement myInputForTheFirstName = driver
 				.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input"));
 		myInputForTheFirstName.sendKeys(myListOfFirstName[randomOne]);
-		
+
+		WebElement myInputForTheLastName = driver
+				.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[2]/input"));
+
+		myInputForTheLastName.sendKeys(myListOfLastName[randomTwo]);
+
+		int PostalCodeRandomNumber = (int) (Math.random() * 10000);
+		String PostalCodeString = Integer.toString(PostalCodeRandomNumber);
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input"))
+		.sendKeys(PostalCodeString);
+		Date currentTime = new Date();
+
+		String myUpdatedate = currentTime.toString();
+
+		String NewDate = myUpdatedate.replace(":", "-");
+
+
+
+		TakesScreenshot ts = (TakesScreenshot) driver;
+		File file = ts.getScreenshotAs(OutputType.FILE);
+
+		FileUtils.copyFile(file, new File("./ScreenShot_Folder/" + NewDate + ".jpg"));
+	
 	}
 
 }
